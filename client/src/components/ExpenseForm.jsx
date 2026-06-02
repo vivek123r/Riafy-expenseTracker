@@ -21,8 +21,8 @@ export default function ExpenseForm({ initial, onSaved, onCancel, compact = fals
   function validate() {
     const errs = {}
     if (!form.title.trim()) errs.title = 'Title is required'
-    const amt = Number(form.amount)
-    if (!form.amount || isNaN(amt) || amt <= 0) errs.amount = 'Amount must be greater than 0'
+    const amt = parseFloat(form.amount)
+    if (!form.amount.toString().trim() || isNaN(amt) || amt <= 0) errs.amount = 'Amount must be greater than 0'
     if (!form.category) errs.category = 'Category is required'
     if (!form.date) errs.date = 'Date is required'
     return errs
@@ -77,7 +77,7 @@ export default function ExpenseForm({ initial, onSaved, onCancel, compact = fals
               className={`input pl-8 ${errors.amount ? 'border-red-400' : ''}`}
               type="number" value={form.amount}
               onChange={e => set('amount', e.target.value)}
-              placeholder="0.00" min="0.01" step="0.01"
+              placeholder="0.00"
             />
           </div>
           {errors.amount && <p className="mt-1 text-xs text-red-500">{errors.amount}</p>}
