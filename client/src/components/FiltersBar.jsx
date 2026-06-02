@@ -42,7 +42,7 @@ export default function FiltersBar({ filters, onChange, onClear }) {
         <select className="input" value={filters.category} onChange={e => set('category', e.target.value)}>
           <option value="">All Categories</option>
           {CATEGORIES.map(c => (
-            <option key={c} value={c}>{CATEGORY_META[c]?.icon} {c}</option>
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
         <input className="input" type="date" value={filters.dateFrom} onChange={e => set('dateFrom', e.target.value)} />
@@ -54,7 +54,7 @@ export default function FiltersBar({ filters, onChange, onClear }) {
         <div className="flex flex-wrap gap-2 pt-1">
           {filters.title && <Chip label={`"${filters.title}"`} onRemove={() => set('title', '')} />}
           {filters.category && (
-            <Chip label={`${CATEGORY_META[filters.category]?.icon} ${filters.category}`} onRemove={() => set('category', '')} />
+            <Chip label={filters.category} onRemove={() => set('category', '')} />
           )}
           {filters.dateFrom && <Chip label={`From: ${filters.dateFrom}`} onRemove={() => set('dateFrom', '')} />}
           {filters.dateTo && <Chip label={`To: ${filters.dateTo}`} onRemove={() => set('dateTo', '')} />}

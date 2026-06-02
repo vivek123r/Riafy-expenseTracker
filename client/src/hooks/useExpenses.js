@@ -16,7 +16,7 @@ export function useExpenses(filters) {
     } finally {
       setLoading(false)
     }
-  }, [JSON.stringify(filters)]) // eslint-disable-line
+  }, [filters.title, filters.category, filters.dateFrom, filters.dateTo])
 
   useEffect(() => { load() }, [load])
 

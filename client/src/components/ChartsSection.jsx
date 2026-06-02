@@ -34,7 +34,7 @@ function CustomTooltip({ active, payload }) {
 }
 
 export default function ChartsSection() {
-  const [month, setMonth] = useState(getCurrentMonth)
+  const [month, setMonth] = useState(getCurrentMonth())
   const { summary, loading } = useSummary(month)
   const isNow = month === getCurrentMonth()
 
@@ -74,9 +74,8 @@ export default function ChartsSection() {
 
       {!loading && pieData.length === 0 && (
         <div className="flex flex-col items-center justify-center h-52 text-slate-400">
-          <span className="text-5xl mb-3">📈</span>
           <p className="text-sm font-medium">No data for {monthLabel(month)}</p>
-          <p className="text-xs mt-1 text-slate-400">Add expenses to see your breakdown</p>
+          <p className="text-xs mt-1">Add expenses to see your breakdown</p>
         </div>
       )}
 

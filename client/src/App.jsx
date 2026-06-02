@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { PlusCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { useExpenses, useSummary } from './hooks/useExpenses'
@@ -32,9 +32,10 @@ export default function App() {
 
   function bump() { setSummaryKey(k => k + 1) }
 
-  function handleSaved() { refetch(); bump(); setShowForm(false) }
-  function handleDeleted() { refetch(); bump() }
-  function handleEditSaved() { refetch(); bump(); setEditingExpense(null) }
+  const handleSaved = useCallback(() => { refetch(); bump(); setShowForm(false) }, [refetch])
+  const handleDeleted = useCallback(() => { refetch(); bump() }, [refetch])
+  const handleEditSaved = useCallback(() => { refetch(); bump(); setEditingExpense(null) }, [refetch])
+  const handleCloseEdit = useCallback(() => setEditingExpense(null), [])
 
   return (
     <div className="min-h-screen relative">
@@ -123,7 +124,7 @@ export default function App() {
         <EditModal
           expense={editingExpense}
           onSaved={handleEditSaved}
-          onClose={() => setEditingExpense(null)}
+          onClose={handleCloseEdit}
         />
       )}
     </div>

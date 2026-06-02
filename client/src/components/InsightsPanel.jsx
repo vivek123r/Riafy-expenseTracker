@@ -1,76 +1,71 @@
 import { Sparkles, AlertCircle } from 'lucide-react'
-import { formatCurrency } from '../utils/format'
-
-function buildInsights(summary) {
-  if (!summary || !summary.breakdown?.length) return []
-  const { total, count, breakdown } = summary
-  const insights = []
-  const top = breakdown[0]
-
-  if (top) insights.push({
-    icon: '🏆', type: top.percentage > 50 ? 'warning' : 'info',
-    text: `You spent ${top.percentage}% on ${top.category} this month (${formatCurrency(top.amount)}).`,
-  })
-  if (count > 0) insights.push({
-    icon: '💳', type: 'info',
-    text: `Average spend per transaction: ${formatCurrency(Math.round(total / count))}.`,
-  })
-  if (breakdown.length >= 2) insights.push({
-    icon: '📊', type: 'info',
-    text: `${breakdown[1].category} is your 2nd largest expense at ${formatCurrency(breakdown[1].amount)}.`,
-  })
-  if (top?.percentage > 60) {
-    insights.push({ icon: '⚠️', type: 'warning', text: `${top.category} takes up over 60% of your budget. Consider redistributing.` })
-  } else {
-    insights.push({ icon: '✅', type: 'success', text: `Spending spread across ${breakdown.length} categories — well balanced!` })
-  }
-  return insights
-}
-
-const TYPE = {
-  info:    'border-l-indigo-400 bg-indigo-50/60 dark:bg-indigo-500/10',
-  warning: 'border-l-amber-400 bg-amber-50/60 dark:bg-amber-500/10',
-  success: 'border-l-emerald-400 bg-emerald-50/60 dark:bg-emerald-500/10',
-}
+import { formatCurrency, CATEGORY_BG } from '../utils/format'
 
 export default function InsightsPanel({ summary, loading }) {
-  const insights = buildInsights(summary)
+  const { total = 0, count = 0, breakdown = [] } = summary || {}
+  const avgPerTx = count > 0 ? total / count : 0
 
   return (
-    <div className="card p-5">
-      <div className="flex items-center gap-2.5 mb-4">
+    <div className="card p-5 h-full">
+      <div className="flex items-center gap-2.5 mb-5">
         <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
           <Sparkles className="h-4 w-4 text-white" />
         </div>
-        <div>
-          <h2 className="text-sm font-semibold text-slate-800 dark:text-white">Spending Insights</h2>
-          <p className="text-xs text-slate-400">Smart analysis</p>
-        </div>
+        <h2 className="text-sm font-semibold text-slate-800 dark:text-white">Spending Insights</h2>
       </div>
 
       {loading && (
-        <div className="space-y-2">
-          {[...Array(3)].map((_, i) => <div key={i} className="shimmer h-12 rounded-xl" />)}
+        <div className="space-y-3">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="shimmer h-10 rounded-xl" />
+          ))}
         </div>
       )}
 
-      {!loading && insights.length === 0 && (
-        <div className="flex flex-col items-center py-6 text-slate-400">
-          <AlertCircle className="h-8 w-8 stroke-1 mb-2" />
+      {!loading && !summary && (
+        <div className="flex flex-col items-center py-8 text-slate-400">
+          <AlertCircle className="h-7 w-7 stroke-1 mb-2" />
           <p className="text-sm">Add expenses to see insights.</p>
         </div>
       )}
 
-      {!loading && insights.map((ins, i) => (
-        <div
-          key={i}
-          className={`flex items-start gap-3 rounded-xl border-l-2 px-3 py-2.5 mb-2 opacity-0 ${TYPE[ins.type]}`}
-          style={{ animation: `fadeSlideUp 0.3s ease ${i * 80}ms forwards` }}
-        >
-          <span className="text-base mt-0.5 flex-shrink-0">{ins.icon}</span>
-          <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{ins.text}</p>
+      {!loading && summary && (
+        <div className="space-y-1">
+          {/* Avg per transaction */}
+          <Row label="Avg per transaction" value={formatCurrency(Math.round(avgPerTx))} />
+
+          {/* Top categories */}
+          {breakdown.slice(0, 4).map((b, i) => (
+            <div
+              key={b.category}
+              className="flex items-center justify-between py-2.5 border-b border-slate-50 dark:border-white/5 last:border-0 opacity-0"
+              style={{ animation: `fadeSlideUp 0.3s ease ${i * 60}ms forwards` }}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-1.5 h-6 rounded-full flex-shrink-0" style={{ background: `var(--cat-${b.category.toLowerCase()}, #94a3b8)` }} />
+                <span className={`badge ${CATEGORY_BG[b.category]}`}>{b.category}</span>
+              </div>
+              <div className="text-right flex-shrink-0 ml-3">
+                <p className="text-sm font-semibold text-slate-800 dark:text-white">{formatCurrency(b.amount)}</p>
+                <p className="text-xs text-slate-400">{b.percentage}%</p>
+              </div>
+            </div>
+          ))}
+
+          {breakdown.length === 0 && (
+            <p className="text-sm text-slate-400 text-center py-4">No data this month</p>
+          )}
         </div>
-      ))}
+      )}
+    </div>
+  )
+}
+
+function Row({ label, value }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-slate-50 dark:border-white/5">
+      <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
+      <span className="text-sm font-semibold text-slate-800 dark:text-white">{value}</span>
     </div>
   )
 }

@@ -7,6 +7,12 @@
   :root {
     --glass: rgba(255,255,255,0.72);
     --glass-border: rgba(255,255,255,0.5);
+    --cat-food: #f97316;
+    --cat-transport: #3b82f6;
+    --cat-shopping: #ec4899;
+    --cat-bills: #8b5cf6;
+    --cat-entertainment: #10b981;
+    --cat-other: #94a3b8;
   }
   .dark {
     --glass: rgba(15,17,23,0.75);
@@ -33,6 +39,17 @@
   }
   .input {
     @apply w-full rounded-xl border bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 px-4 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-sm transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50;
+  }
+
+  /* Fix native select dark mode — browser ignores Tailwind bg on <select> without this */
+  .dark select.input,
+  .dark select.input option {
+    background-color: #1e293b;
+    color: #e2e8f0;
+  }
+  select.input {
+    background-color: #ffffff;
+    color: #1e293b;
   }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95; }
   .btn-primary { @apply btn bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02]; }

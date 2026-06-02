@@ -41,9 +41,13 @@ export default function ExpenseForm({ initial, onSaved, onCancel, compact = fals
       if (!isEdit) setForm(empty())
       onSaved(saved)
     } catch (err) {
-      if (err.errors) {
-        const fe = {}; err.errors.forEach(e => { fe[e.path] = e.msg }); setErrors(fe)
-      } else setErrors({ submit: err.message })
+      if (err.errors && Array.isArray(err.errors)) {
+        const fe = {}
+        err.errors.forEach(e => { if (e?.path) fe[e.path] = e.msg })
+        setErrors(fe)
+      } else {
+        setErrors({ submit: err.message || 'Something went wrong' })
+      }
     } finally { setSaving(false) }
   }
 
@@ -85,7 +89,7 @@ export default function ExpenseForm({ initial, onSaved, onCancel, compact = fals
           </label>
           <select className="input" value={form.category} onChange={e => set('category', e.target.value)}>
             {CATEGORIES.map(c => (
-              <option key={c} value={c}>{CATEGORY_META[c]?.icon} {c}</option>
+              <option key={c} value={c}>{c}</option>
             ))}
           </select>
         </div>

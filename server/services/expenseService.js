@@ -71,13 +71,19 @@ async function getMonthlySummary(month) {
     byCategory[e.category] = (byCategory[e.category] || 0) + e.amount;
   }
 
-  const breakdown = Object.entries(byCategory)
-    .map(([category, amount]) => ({
-      category,
-      amount,
-      percentage: total > 0 ? Math.round((amount / total) * 100) : 0,
-    }))
+  const sorted = Object.entries(byCategory)
+    .map(([category, amount]) => ({ category, amount }))
     .sort((a, b) => b.amount - a.amount);
+
+  // Largest remainder method so percentages always sum to 100
+  let remaining = 100;
+  const breakdown = sorted.map((item, i) => {
+    const pct = i === sorted.length - 1
+      ? remaining
+      : Math.round((item.amount / total) * 100);
+    remaining -= pct;
+    return { ...item, percentage: total > 0 ? pct : 0 };
+  });
 
   return { month, total, count, breakdown };
 }

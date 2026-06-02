@@ -22,22 +22,10 @@ function ExpenseCard({ exp, onEdit, onDeleted, index }) {
 
   return (
     <div
-      className="group flex gap-3 mb-3 opacity-0"
+      className="group mb-2 opacity-0"
       style={{ animation: `fadeSlideUp 0.35s ease ${index * 40}ms forwards` }}
     >
-      {/* Timeline icon + line */}
-      <div className="flex flex-col items-center flex-shrink-0 pt-1">
-        <div
-          className="h-9 w-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-          style={{ background: `${meta.color}18`, border: `1.5px solid ${meta.color}30` }}
-        >
-          {meta.icon}
-        </div>
-        <div className="flex-1 w-px bg-slate-100 dark:bg-white/5 mt-1" />
-      </div>
-
-      {/* Card */}
-      <div className="flex-1 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 shadow-sm hover:shadow-md hover:shadow-indigo-500/5 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+      <div className="rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 shadow-sm hover:shadow-md hover:shadow-indigo-500/5 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
         <div
           className="flex items-center justify-between p-4 cursor-pointer"
           onClick={() => exp.note && setExpanded(v => !v)}
@@ -106,9 +94,6 @@ export default function ExpenseTimeline({ expenses, loading, onEdit, onDeleted }
   if (!expenses.length) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <div className="mb-4 h-20 w-20 rounded-3xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-500/15 dark:to-purple-500/15 flex items-center justify-center text-4xl">
-          📊
-        </div>
         <p className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-1">No expenses found</p>
         <p className="text-sm text-slate-400">Try adjusting filters or add a new expense</p>
       </div>
