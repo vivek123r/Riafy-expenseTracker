@@ -1,5 +1,4 @@
 import { formatCurrency, CATEGORY_BG, CATEGORY_COLORS } from '../utils/format'
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 export default function InsightsPanel({ summary, loading }) {
   const { total = 0, count = 0, breakdown = [] } = summary || {}

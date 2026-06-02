@@ -1,117 +1,206 @@
 # Expense Tracker
 
-A production-quality personal expense tracker built as a full-stack web application.
-
-## Quick Start
-
-**Prerequisites:** Node.js 18+
-
-### 1. Setup (run once)
-
-```bash
-# Server — install deps, generate Prisma client, create DB
-cd server
-npm install
-npx prisma generate
-npx prisma db push
-
-# Client — install deps
-cd ../client
-npm install
-```
-
-### 2. Run
-
-```bash
-# Terminal 1 — backend on http://localhost:3001
-cd server
-npm run dev
-
-# Terminal 2 — frontend on http://localhost:3000
-cd client
-npm run dev
-```
-
-Open **http://localhost:3000**
+A personal expense tracking web app with a fintech-grade UI. Built with React, Node.js, Express, SQLite, and Prisma.
 
 ---
 
 ## Tech Stack
 
-| Layer      | Technology                  | Rationale                                                       |
-|------------|-----------------------------|-----------------------------------------------------------------|
-| Frontend   | React 18 + Vite             | Fast HMR, minimal config                                        |
-| Styling    | TailwindCSS                 | Utility-first, consistent spacing and colors, no stylesheet bloat |
-| Charts     | Recharts                    | Declarative, composable React charts — Pie chart for breakdown  |
-| Icons      | lucide-react                | Lightweight, consistent SVG icons                               |
-| Backend    | Node.js + Express           | Minimal boilerplate REST API                                    |
-| ORM        | Prisma                      | Type-safe DB client, easy migrations, great SQLite support       |
-| Database   | SQLite (via Prisma)         | Zero-config local file, no server needed                        |
-| Validation | express-validator           | Declarative field validation, standard middleware pattern        |
-
-**Tradeoff:** Prisma adds a generation step (`prisma generate`) but provides a much better developer experience than raw SQL or a lighter ORM. For a local SQLite app the cold-start overhead is negligible.
+| Layer    | Technology                         |
+|----------|------------------------------------|
+| Frontend | React 18 + Vite + TailwindCSS      |
+| Backend  | Node.js + Express                  |
+| Database | SQLite (local file via Prisma ORM) |
+| Charts   | Recharts                           |
+| Icons    | lucide-react                       |
 
 ---
 
-## Architecture
+## Project Structure
 
 ```
-server/
-  prisma/schema.prisma    — DB schema (Expense model)
-  lib/prisma.js           — Prisma singleton
-  routes/                 — Express routers (expenses, summary)
-  controllers/            — Thin request/response handlers
-  services/expenseService — All business logic & DB queries
-  middleware/             — errorHandler, validate
-
-client/
-  src/
-    services/api.js       — All fetch calls (thin API layer)
-    hooks/useExpenses.js  — Data-fetching hooks (loading/error state)
-    utils/format.js       — Formatting helpers, category constants
-    components/           — Reusable UI components
-    App.jsx               — Root layout and state orchestration
+expenseTracker/
+├── client/                  # React frontend (Vite, port 3000)
+│   └── src/
+│       ├── components/      # UI components
+│       ├── hooks/           # useExpenses, useSummary, useTheme
+│       ├── services/api.js  # All fetch calls
+│       └── utils/format.js  # Formatters, category constants
+├── server/                  # Node.js backend (Express, port 3001)
+│   ├── prisma/
+│   │   ├── schema.prisma    # DB schema
+│   │   └── dev.db           # SQLite database file (auto-created)
+│   ├── routes/
+│   ├── controllers/
+│   ├── services/
+│   └── server.js
+└── package.json
 ```
 
 ---
 
-## API
+## Prerequisites
 
-| Method | Path                        | Description                                |
-|--------|-----------------------------|--------------------------------------------|
-| GET    | /api/expenses               | List (filter: category, dateFrom, dateTo, title) |
-| GET    | /api/expenses/:id           | Get single expense                         |
-| POST   | /api/expenses               | Create expense                             |
-| PUT    | /api/expenses/:id           | Update expense                             |
-| DELETE | /api/expenses/:id           | Delete expense                             |
-| GET    | /api/summary/monthly?month= | Monthly total + category breakdown         |
+- **Node.js 18+** — download from https://nodejs.org
 
 ---
 
-## Features Completed
+## First-Time Setup
 
-- [x] Add expense with full validation (client + server)
-- [x] List all expenses sorted by date descending
-- [x] Edit expense via modal dialog (pre-filled form)
-- [x] Delete with confirmation
-- [x] Filter by category, date range, title (partial match) — combined
-- [x] Monthly summary: total, transaction count, category breakdown with % 
-- [x] Recharts Pie chart with category colors
-- [x] Month navigation (previous/next)
-- [x] Mobile-responsive layout (table collapses to cards)
-- [x] Loading states, empty states, error states
-- [x] Invalid date range guard (from > to)
+Run these commands once after cloning the repo.
 
-## Features Skipped
+**Step 1 — Set up the backend:**
 
-- Authentication / user accounts (out of scope per spec)
-- Pagination (personal use, <1000 rows is fine)
-- Test suite
-- Deployment config
+```bash
+cd server
+npm install
+npx prisma generate
+npx prisma db push
+```
 
-## Known Limitations
+**Step 2 — Set up the frontend (new terminal):**
 
-- Dates are stored as `TEXT` in SQLite (`YYYY-MM-DD`). This is correct for sorting but has no timezone handling — all dates are treated as local calendar dates.
-- `prisma generate` must be re-run after any schema change.
-- The Vite proxy (`/api` → `localhost:3001`) only works in dev mode. Production would need a reverse proxy or monorepo serving strategy.
-- Future dates are accepted (no validation against today) — intentional, to allow pre-entering planned expenses.
+```bash
+cd client
+npm install
+```
+
+---
+
+## Running the App
+
+You need **two terminals open at the same time**.
+
+**Terminal 1 — Backend (port 3001):**
+
+```bash
+cd server
+npm run dev
+```
+
+**Terminal 2 — Frontend (port 3000):**
+
+```bash
+cd client
+npm run dev
+```
+
+Then open **http://localhost:3000** in your browser.
+
+---
+
+## Viewing & Managing the Database
+
+### Prisma Studio — browser-based GUI (recommended)
+
+```bash
+cd server
+npx prisma studio
+```
+
+Opens at **http://localhost:5555** — browse, edit, and delete records visually.
+
+### SQLite CLI — command line
+
+```bash
+cd server
+sqlite3 prisma/dev.db
+```
+
+Useful SQL commands:
+
+```sql
+SELECT * FROM Expense;                          -- view all expenses
+SELECT * FROM Expense ORDER BY date DESC;       -- latest first
+SELECT * FROM Expense WHERE category = 'Food';  -- filter by category
+DELETE FROM Expense WHERE id = 'some-id';       -- delete a record
+.quit                                           -- exit
+```
+
+### DB Browser for SQLite — desktop GUI
+
+Download from https://sqlitebrowser.org and open `server/prisma/dev.db`.
+
+The database file is located at:
+
+```
+server/prisma/dev.db
+```
+
+---
+
+## API Reference
+
+Base URL: `http://localhost:3001/api`
+
+| Method | Endpoint                        | Description                      |
+|--------|---------------------------------|----------------------------------|
+| GET    | `/expenses`                     | List expenses (supports filters) |
+| GET    | `/expenses/:id`                 | Get a single expense             |
+| POST   | `/expenses`                     | Create a new expense             |
+| PUT    | `/expenses/:id`                 | Update an expense                |
+| DELETE | `/expenses/:id`                 | Delete an expense                |
+| GET    | `/summary/monthly?month=YYYY-MM`| Monthly total + category breakdown|
+
+### Filter params for `GET /expenses`
+
+| Param      | Example       | Description             |
+|------------|---------------|-------------------------|
+| `title`    | `coffee`      | Search by title         |
+| `category` | `Food`        | Filter by category      |
+| `dateFrom` | `2026-06-01`  | Start date (YYYY-MM-DD) |
+| `dateTo`   | `2026-06-30`  | End date (YYYY-MM-DD)   |
+
+### Expense object
+
+```json
+{
+  "id": "clxyz...",
+  "title": "Coffee at Starbucks",
+  "amount": 250.00,
+  "category": "Food",
+  "date": "2026-06-02",
+  "note": "Optional note"
+}
+```
+
+### Available categories
+
+`Food` `Transport` `Shopping` `Entertainment` `Health` `Bills` `Education` `Other`
+
+---
+
+## Environment Variables
+
+The server reads from `server/.env` — no changes needed for local development:
+
+```env
+DATABASE_URL="file:./prisma/dev.db"
+PORT=3001
+```
+
+---
+
+## Useful Commands
+
+| Command                              | What it does                        |
+|--------------------------------------|-------------------------------------|
+| `cd server && npm run dev`           | Start backend with auto-reload      |
+| `cd client && npm run dev`           | Start frontend dev server           |
+| `cd server && npx prisma studio`     | Open database GUI at localhost:5555 |
+| `cd server && npx prisma db push`    | Apply schema changes to the DB      |
+| `cd server && npx prisma generate`   | Regenerate Prisma client after schema change |
+
+---
+
+## Features
+
+- Add, edit, delete expenses with full validation
+- Filter by title, category, and date range
+- Monthly summary cards (total, transactions, top category, avg daily)
+- Animated count-up numbers on summary cards
+- Donut + bar charts for spending breakdown
+- Full analytics page with month navigation
+- Category breakdown with progress bars
+- Dark / Light mode toggle (persisted to localStorage)
+- Responsive layout — sidebar on desktop, drawer on mobile

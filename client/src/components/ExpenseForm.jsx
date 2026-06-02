@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CATEGORIES, CATEGORY_META, getToday } from '../utils/format'
+import { CATEGORIES, getToday } from '../utils/format'
 import { api } from '../services/api'
 import { Plus } from 'lucide-react'
 

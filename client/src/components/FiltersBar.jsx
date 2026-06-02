@@ -1,5 +1,5 @@
 import { Search, X, SlidersHorizontal } from 'lucide-react'
-import { CATEGORIES, CATEGORY_META } from '../utils/format'
+import { CATEGORIES } from '../utils/format'
 
 export default function FiltersBar({ filters, onChange, onClear }) {
   function set(field, value) { onChange({ ...filters, [field]: value }) }

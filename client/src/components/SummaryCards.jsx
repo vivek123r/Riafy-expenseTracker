@@ -1,5 +1,5 @@
 import { CreditCard, TrendingUp, Trophy, Calendar } from 'lucide-react'
-import { formatCurrency, formatCompact, CATEGORY_META } from '../utils/format'
+import { formatCompact } from '../utils/format'
 import { useEffect, useRef, useState } from 'react'
 
 function useCountUp(target, duration = 1000) {
@@ -63,7 +63,6 @@ export default function SummaryCards({ summary, loading }) {
     )
   }
 
-  const topIcon = topCat ? CATEGORY_META[topCat.category]?.icon : '—'
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -87,7 +86,7 @@ export default function SummaryCards({ summary, loading }) {
         icon={Trophy}
         iconClass="bg-amber-100 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400"
         label="Largest Category"
-        value={topCat ? `${topIcon} ${topCat.category}` : '—'}
+        value={topCat?.category || '—'}
         sub={topCat ? `${topCat.percentage}% of total` : 'No data'}
         delay={120}
       />

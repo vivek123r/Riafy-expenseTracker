@@ -1,5 +1,4 @@
 import { Sun, Moon, Wallet, ChevronDown } from 'lucide-react'
-import { monthLabel, getCurrentMonth } from '../utils/format'
 
 export default function Navbar({ dark, toggleDark }) {
   return (
@@ -12,7 +11,6 @@ export default function Navbar({ dark, toggleDark }) {
             </div>
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">Expense Tracker</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">{monthLabel(getCurrentMonth())}</p>
             </div>
           </div>
 
