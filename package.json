@@ -2,7 +2,7 @@
   "name": "expense-tracker",
   "version": "1.0.0",
   "scripts": {
-    "setup": "cd server && npm install && npx prisma generate && npx prisma db push && cd ../client && npm install",
+    "setup": "cd server && (test -f .env || echo DATABASE_URL=\"file:./prisma/dev.db\" > .env) && npm install && npx prisma generate && npx prisma db push && cd ../client && npm install",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev"
   }

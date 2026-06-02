@@ -53,6 +53,7 @@ Run these commands once after cloning the repo.
 
 ```bash
 cd server
+cp .env.example .env
 npm install
 npx prisma generate
 npx prisma db push
