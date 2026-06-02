@@ -1,4 +1,4 @@
-import { LayoutDashboard, CreditCard, TrendingUp, X, Menu, Zap } from 'lucide-react'
+import { LayoutDashboard, CreditCard, TrendingUp, X, Menu } from 'lucide-react'
 import { useState } from 'react'
 
 const NAV = [
@@ -26,18 +26,6 @@ function SidebarContent({ activeView, onNav, onClose }) {
         ))}
       </div>
 
-      <div className="px-3 mt-4">
-        <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/15 dark:to-purple-500/15 border border-indigo-100 dark:border-indigo-500/20 p-4">
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Zap className="h-3 w-3 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-slate-800 dark:text-white">Upgrade to Pro</span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Unlimited history & exports</p>
-          <button className="w-full btn-primary text-xs py-2">Upgrade Plan</button>
-        </div>
-      </div>
     </div>
   )
 }

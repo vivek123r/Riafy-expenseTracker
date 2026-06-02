@@ -40,7 +40,7 @@ export default function ChartsSection() {
 
   const pieData = summary?.breakdown.map(b => ({ name: b.category, value: b.amount })) || []
   const barData = summary?.breakdown.map(b => ({
-    name: b.category.slice(0, 5),
+    name: b.category,
     amount: b.amount,
     fill: CATEGORY_COLORS[b.category] || '#94a3b8',
   })) || []
