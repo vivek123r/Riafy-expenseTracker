@@ -32,7 +32,7 @@ function Card({ icon: Icon, iconClass, label, value, sub, delay }) {
         </div>
       </div>
       <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight truncate">{value}</p>
+      <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight truncate">{value}</p>
       {sub && <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{sub}</p>}
     </div>
   )

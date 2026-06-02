@@ -50,7 +50,7 @@ export default function App() {
         <div className="flex flex-1 min-h-0">
           <Sidebar activeView={view} onNav={setView} />
 
-          <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-5">
+          <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 pb-24 lg:pb-6 space-y-5">
 
             {/* ── Analytics view ── */}
             {view === 'analytics' && <AnalyticsView />}

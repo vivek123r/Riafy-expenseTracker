@@ -16,17 +16,17 @@ export default function EditModal({ expense, onSaved, onClose }) {
   if (!expense) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         style={{ animation: 'fadeIn 0.15s ease' }}
         onClick={onClose}
       />
       <div
-        className="relative z-10 w-full max-w-lg glass rounded-2xl shadow-2xl"
+        className="relative z-10 w-full sm:max-w-lg glass sm:rounded-2xl rounded-t-2xl shadow-2xl max-h-[92vh] flex flex-col"
         style={{ animation: 'modalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/20 dark:border-white/5">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/20 dark:border-white/5 flex-shrink-0">
           <div>
             <h2 className="text-base font-semibold text-slate-800 dark:text-white">Edit Expense</h2>
             <p className="text-xs text-slate-400 mt-0.5">Update the expense details below</p>
@@ -38,12 +38,11 @@ export default function EditModal({ expense, onSaved, onClose }) {
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-5 overflow-y-auto">
           <ExpenseForm
             initial={expense}
             onSaved={saved => { onSaved(saved); onClose() }}
             onCancel={onClose}
-            compact
           />
         </div>
       </div>

@@ -41,13 +41,13 @@ export default function AnalyticsView() {
   return (
     <div className="space-y-5">
       {/* Month nav */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-lg font-bold text-slate-800 dark:text-white">Analytics</h1>
         <div className="flex items-center gap-1 card px-3 py-2">
           <button className="btn-ghost h-7 w-7 rounded-lg p-0" onClick={() => setMonth(m => navMonth(m, -1))}>
             <ChevronLeft className="h-3.5 w-3.5" />
           </button>
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-200 min-w-[130px] text-center">
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-200 min-w-[110px] text-center">
             {monthLabel(month)}
           </span>
           <button className="btn-ghost h-7 w-7 rounded-lg p-0 disabled:opacity-30"
@@ -108,11 +108,12 @@ export default function AnalyticsView() {
             <div className="card p-5">
               <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">Amount by Category</h3>
               <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={barData} barSize={32}>
+                <BarChart data={barData} barSize={28} margin={{ bottom: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.12)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
+                    angle={-35} textAnchor="end" interval={0} />
                   <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
-                    tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} />
+                    tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} width={36} />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(99,102,241,0.06)', radius: 8 }} />
                   <Bar dataKey="amount" radius={[6, 6, 0, 0]}>
                     {barData.map((e, i) => <Cell key={i} fill={CATEGORY_COLORS[e.name] || '#94a3b8'} />)}

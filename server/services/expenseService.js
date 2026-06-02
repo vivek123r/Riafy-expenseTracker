@@ -14,7 +14,7 @@ async function listExpenses({ category, dateFrom, dateTo, title } = {}) {
     if (dateTo) where.date.lte = dateTo;
   }
   if (title) {
-    where.title = { contains: title, mode: 'insensitive' };
+    where.title = { contains: title };
   }
 
   return prisma.expense.findMany({

@@ -103,12 +103,13 @@ export default function ChartsSection() {
           <div>
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">By Category</p>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={barData} barSize={28}>
+              <BarChart data={barData} barSize={24} margin={{ bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.12)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
+                  angle={-35} textAnchor="end" interval={0} />
                 <YAxis
                   tick={{ fontSize: 10 }} tickLine={false} axisLine={false}
-                  tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v}
+                  tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} width={36}
                 />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(99,102,241,0.06)', radius: 8 }} />
                 <Bar dataKey="amount" radius={[6, 6, 0, 0]}>

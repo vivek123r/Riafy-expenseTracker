@@ -9,9 +9,7 @@ export default function Navbar({ dark, toggleDark }) {
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30 flex-shrink-0">
               <Wallet className="h-4 w-4 text-white" />
             </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">Expense Tracker</p>
-            </div>
+            <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">Expense Tracker</p>
           </div>
 
           <div className="flex-1" />
