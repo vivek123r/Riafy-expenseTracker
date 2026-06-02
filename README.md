@@ -51,6 +51,8 @@ Run these commands once after cloning the repo.
 
 **Step 1 — Set up the backend:**
 
+> **Important:** Rename `.env.example` to `.env` inside the `server/` folder before running setup. This is required for the database to connect.
+
 ```bash
 cd server
 cp .env.example .env
