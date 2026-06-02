@@ -1,71 +1,67 @@
-import { Sparkles, AlertCircle } from 'lucide-react'
-import { formatCurrency, CATEGORY_BG } from '../utils/format'
+import { formatCurrency, CATEGORY_BG, CATEGORY_COLORS } from '../utils/format'
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 export default function InsightsPanel({ summary, loading }) {
   const { total = 0, count = 0, breakdown = [] } = summary || {}
-  const avgPerTx = count > 0 ? total / count : 0
+  const avgPerTx = count > 0 ? Math.round(total / count) : 0
+  const topCat = breakdown[0]
 
   return (
-    <div className="card p-5 h-full">
-      <div className="flex items-center gap-2.5 mb-5">
-        <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
-          <Sparkles className="h-4 w-4 text-white" />
-        </div>
-        <h2 className="text-sm font-semibold text-slate-800 dark:text-white">Spending Insights</h2>
-      </div>
+    <div className="card p-5 h-full flex flex-col">
+      <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Category Breakdown</h2>
 
       {loading && (
-        <div className="space-y-3">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="shimmer h-10 rounded-xl" />
-          ))}
+        <div className="space-y-3 flex-1">
+          {[...Array(5)].map((_, i) => <div key={i} className="shimmer h-9 rounded-lg" />)}
         </div>
       )}
 
-      {!loading && !summary && (
-        <div className="flex flex-col items-center py-8 text-slate-400">
-          <AlertCircle className="h-7 w-7 stroke-1 mb-2" />
-          <p className="text-sm">Add expenses to see insights.</p>
+      {!loading && breakdown.length === 0 && (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-sm text-slate-400">No expenses this month</p>
         </div>
       )}
 
-      {!loading && summary && (
-        <div className="space-y-1">
-          {/* Avg per transaction */}
-          <Row label="Avg per transaction" value={formatCurrency(Math.round(avgPerTx))} />
+      {!loading && breakdown.length > 0 && (
+        <div className="flex-1 flex flex-col justify-between">
+          {/* Category rows */}
+          <div className="space-y-1">
+            {breakdown.map((b, i) => (
+              <div
+                key={b.category}
+                className="opacity-0"
+                style={{ animation: `fadeSlideUp 0.3s ease ${i * 50}ms forwards` }}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className={`badge ${CATEGORY_BG[b.category]}`}>{b.category}</span>
+                  <div className="text-right">
+                    <span className="text-sm font-semibold text-slate-800 dark:text-white">{formatCurrency(b.amount)}</span>
+                    <span className="text-xs text-slate-400 ml-2">{b.percentage}%</span>
+                  </div>
+                </div>
+                <div className="h-1.5 rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden mb-2">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${b.percentage}%`, background: CATEGORY_COLORS[b.category] || '#94a3b8' }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
-          {/* Top categories */}
-          {breakdown.slice(0, 4).map((b, i) => (
-            <div
-              key={b.category}
-              className="flex items-center justify-between py-2.5 border-b border-slate-50 dark:border-white/5 last:border-0 opacity-0"
-              style={{ animation: `fadeSlideUp 0.3s ease ${i * 60}ms forwards` }}
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-1.5 h-6 rounded-full flex-shrink-0" style={{ background: `var(--cat-${b.category.toLowerCase()}, #94a3b8)` }} />
-                <span className={`badge ${CATEGORY_BG[b.category]}`}>{b.category}</span>
-              </div>
-              <div className="text-right flex-shrink-0 ml-3">
-                <p className="text-sm font-semibold text-slate-800 dark:text-white">{formatCurrency(b.amount)}</p>
-                <p className="text-xs text-slate-400">{b.percentage}%</p>
-              </div>
+          {/* Summary stats */}
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 grid grid-cols-2 gap-3">
+            <div className="rounded-xl bg-slate-50 dark:bg-white/5 p-3">
+              <p className="text-xs text-slate-400 mb-0.5">Avg / transaction</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-white">{formatCurrency(avgPerTx)}</p>
             </div>
-          ))}
-
-          {breakdown.length === 0 && (
-            <p className="text-sm text-slate-400 text-center py-4">No data this month</p>
-          )}
+            <div className="rounded-xl bg-slate-50 dark:bg-white/5 p-3">
+              <p className="text-xs text-slate-400 mb-0.5">Top category</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{topCat?.category || '—'}</p>
+            </div>
+          </div>
         </div>
       )}
-    </div>
-  )
-}
-
-function Row({ label, value }) {
-  return (
-    <div className="flex items-center justify-between py-2.5 border-b border-slate-50 dark:border-white/5">
-      <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
-      <span className="text-sm font-semibold text-slate-800 dark:text-white">{value}</span>
     </div>
   )
 }

@@ -1,52 +1,28 @@
-import { LayoutDashboard, CreditCard, TrendingUp, BarChart2, Settings, HelpCircle, Zap, X, Menu } from 'lucide-react'
+import { LayoutDashboard, CreditCard, TrendingUp, X, Menu, Zap } from 'lucide-react'
 import { useState } from 'react'
 
 const NAV = [
-  {
-    group: 'General',
-    items: [
-      { icon: LayoutDashboard, label: 'Dashboard', active: true },
-      { icon: CreditCard, label: 'All Expenses' },
-    ],
-  },
-  {
-    group: 'Analytics',
-    items: [
-      { icon: TrendingUp, label: 'Insights' },
-      { icon: BarChart2, label: 'Analytics' },
-    ],
-  },
-  {
-    group: 'Other',
-    items: [
-      { icon: Settings, label: 'Settings' },
-      { icon: HelpCircle, label: 'Help Center' },
-    ],
-  },
+  { icon: LayoutDashboard, label: 'Dashboard',    view: 'dashboard' },
+  { icon: CreditCard,      label: 'All Expenses', view: 'expenses'  },
+  { icon: TrendingUp,      label: 'Analytics',    view: 'analytics' },
 ]
 
-function SidebarContent({ onClose }) {
+function SidebarContent({ activeView, onNav, onClose }) {
   return (
     <div className="flex flex-col h-full py-4">
-      <div className="flex-1 px-3 space-y-5 overflow-y-auto">
-        {NAV.map(group => (
-          <div key={group.group}>
-            <p className="px-3 mb-1.5 text-xs font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-wider">
-              {group.group}
-            </p>
-            <div className="space-y-0.5">
-              {group.items.map(item => (
-                <button
-                  key={item.label}
-                  className={`nav-item w-full ${item.active ? 'active' : ''}`}
-                  onClick={onClose}
-                >
-                  <item.icon className="h-4 w-4 flex-shrink-0" />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <p className="px-3 mb-2 text-xs font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-wider">
+          Menu
+        </p>
+        {NAV.map(item => (
+          <button
+            key={item.view}
+            className={`nav-item w-full ${activeView === item.view ? 'active' : ''}`}
+            onClick={() => { onNav(item.view); onClose() }}
+          >
+            <item.icon className="h-4 w-4 flex-shrink-0" />
+            <span>{item.label}</span>
+          </button>
         ))}
       </div>
 
@@ -58,7 +34,7 @@ function SidebarContent({ onClose }) {
             </div>
             <span className="text-sm font-semibold text-slate-800 dark:text-white">Upgrade to Pro</span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">AI insights & unlimited history</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Unlimited history & exports</p>
           <button className="w-full btn-primary text-xs py-2">Upgrade Plan</button>
         </div>
       </div>
@@ -66,7 +42,7 @@ function SidebarContent({ onClose }) {
   )
 }
 
-export default function Sidebar() {
+export default function Sidebar({ activeView, onNav }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -79,22 +55,15 @@ export default function Sidebar() {
       </button>
 
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
+        <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
-      <aside className={`
-        fixed inset-y-0 left-0 z-40 w-60 glass border-r border-white/20 dark:border-white/5
-        transform transition-transform duration-300 ease-in-out lg:hidden
-        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-        <SidebarContent onClose={() => setMobileOpen(false)} />
+      <aside className={`fixed inset-y-0 left-0 z-40 w-60 glass border-r border-white/20 dark:border-white/5 transform transition-transform duration-300 ease-in-out lg:hidden ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <SidebarContent activeView={activeView} onNav={onNav} onClose={() => setMobileOpen(false)} />
       </aside>
 
       <aside className="hidden lg:flex lg:flex-col w-56 flex-shrink-0 glass border-r border-white/20 dark:border-white/5 min-h-screen sticky top-0 h-screen">
-        <SidebarContent onClose={() => {}} />
+        <SidebarContent activeView={activeView} onNav={onNav} onClose={() => {}} />
       </aside>
     </>
   )
